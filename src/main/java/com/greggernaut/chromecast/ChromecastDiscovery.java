@@ -37,7 +37,8 @@ public class ChromecastDiscovery {
         }
         return null;
     }
-    private static List<Chromecast> discover(String[] hosts) {
+
+    public static List<Chromecast> discover(String[] hosts) {
         List<Chromecast> casts = new ArrayList<>(hosts.length);
 
         for (String host : hosts) {

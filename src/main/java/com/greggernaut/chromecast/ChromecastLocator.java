@@ -8,8 +8,8 @@ import java.util.List;
 
 public class ChromecastLocator {
     public static void main(String[] args) throws InterruptedException {
-        List<Chromecast> chromecasts = new ArrayList<>(1);
-        chromecasts.add(ChromecastDiscovery.discover("172.16.0.120"));
+
+        List<Chromecast> chromecasts = ChromecastDiscovery.discover(args);
 
         Thread mdns = new Thread(new MdnsListener(chromecasts));
         mdns.start();
