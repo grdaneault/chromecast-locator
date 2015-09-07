@@ -1,9 +1,6 @@
 package com.greggernaut.chromecast;
 
-import com.google.common.base.Preconditions;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -11,13 +8,20 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Helper utility to locate information about given chromecasts based on IP/Hostname
+ */
 public class ChromecastDiscovery {
+
+    /**
+     * Standalone program to lookup the Friendly Name and ID of the chromecasts specified as arguments.
+     *
+     * @param args A list of chromecast IPs or hostnames
+     */
     public static void main(String[] args) {
         if (args.length < 1) {
             System.err.println("Specify at least one chromecast");
@@ -29,6 +33,12 @@ public class ChromecastDiscovery {
         }
     }
 
+    /**
+     * Parses the chromecast data for a single host
+     *
+     * @param host the host to load
+     * @return The chromecast at this host, if available.  Null otherwise.
+     */
     public static Chromecast discover(String host) {
         try {
             return parse(host);
@@ -38,6 +48,12 @@ public class ChromecastDiscovery {
         return null;
     }
 
+    /**
+     * Parses the chromecast data for multiple hosts
+     *
+     * @param hosts the hosts to load
+     * @return The chromecasts at these hosts, if available.
+     */
     public static List<Chromecast> discover(String[] hosts) {
         List<Chromecast> casts = new ArrayList<>(hosts.length);
 
@@ -55,6 +71,17 @@ public class ChromecastDiscovery {
         return casts;
     }
 
+    /**
+     * Helper method to actually attempt the connection and parse the data.
+     * <p/>
+     * uses the ssdp/device-desc.xml file to populate information about the chromecast.
+     *
+     * @param host  The host to load
+     * @return The chromecast
+     * @throws IOException
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     */
     private static Chromecast parse(String host) throws IOException, ParserConfigurationException, SAXException {
         String ssdpPath = "http://" + host + ":8008/ssdp/device-desc.xml";
         URL ssdpUrl = new URL(ssdpPath);

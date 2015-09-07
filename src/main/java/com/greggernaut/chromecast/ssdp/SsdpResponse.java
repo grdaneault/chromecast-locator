@@ -7,15 +7,34 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
- * Created by gregd on 9/6/2015.
+ * Response to a SSDP Discovery request.
+ * <p/>
+ * Based off the information here:
+ * https://github.com/jloutsenhizer/CR-Cast/wiki/Chromecast-Implementation-Documentation-WIP#dialssdp
  */
 public class SsdpResponse {
 
+    /**
+     * Target chromecast
+     */
     Chromecast chromecast;
+
+    /**
+     * Byte array of the response message that can be sent to the requester
+     */
     byte[] response;
 
+    /**
+     * Date formatter for date field in response
+     */
     private static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    /**
+     * Constructor.
+     *
+     * @param request    The originating request
+     * @param chromecast The chromecast that matches the incoming request
+     */
     public SsdpResponse(SsdpRequest request, Chromecast chromecast) {
         this.chromecast = chromecast;
 
@@ -40,6 +59,11 @@ public class SsdpResponse {
         this.response = response.getBytes();
     }
 
+    /**
+     * The byte array that can be sent as a packet over the wire
+     *
+     * @return The response payload
+     */
     public byte[] toWire() {
         return response;
     }
